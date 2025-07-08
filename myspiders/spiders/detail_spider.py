@@ -28,6 +28,15 @@ class BonyadDetailSpider(scrapy.Spider):
             if aid:
                 except_ids.append(aid)
 
+        # If we have answers from the main page, yield them immediately
+        if answers:
+            yield {
+                "url": response.url,
+                "question_title": question_title,
+                "question_body": question_body,
+                "answers": answers
+            }
+
         # Extract slug from URL
         question_slug = response.url.split("/question/")[-1].rstrip("/")
         encoded_slug = quote(question_slug, safe='')
@@ -51,7 +60,8 @@ class BonyadDetailSpider(scrapy.Spider):
                 "question_body": question_body,
                 "answers": answers,
                 "url": response.url
-            }
+            },
+            errback=self.handle_api_error
         )
 
     def parse_api_answers(self, response):
@@ -65,3 +75,13 @@ class BonyadDetailSpider(scrapy.Spider):
             "question_body": response.meta["question_body"],
             "answers": all_answers
         }
+
+    def handle_api_error(self, failure):
+        # If API call fails, we still have the data from the main page
+        if failure.value.response.status == 422:
+            # This is expected - API returns 422 for some requests
+            # The data was already yielded in parse_question
+            pass
+        else:
+            # Log other errors
+            self.logger.error(f"API request failed: {failure.value}")
