@@ -1,18 +1,31 @@
-# Use an official Python runtime as a parent image
-FROM python:3.9-slim-buster
+FROM python:3.11-slim
 
-# Set the working directory in the container
+# Install required system dependencies
+RUN apt-get update && apt-get install -y \
+    gcc \
+    libxml2-dev \
+    libxslt-dev \
+    libffi-dev \
+    libz-dev \
+    curl \
+    git \
+    python3-dev \
+    build-essential \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set working directory
 WORKDIR /app
 
-# Copy the current directory contents into the container at /app
+# Copy project files
 COPY . /app
 
-# Install any needed packages specified in requirements.txt
-# If you don't have a requirements.txt, create one with `Scrapy` and any other dependencies
-RUN pip install --no-cache-dir scrapy
+# Install Python packages
+RUN pip install --upgrade pip \
+    && pip install --no-cache-dir -r requirements.txt
 
-# Install any project-specific dependencies (if any, e.g., other libraries your spiders use)
-# For example, if you use pandas or numpy, add them to requirements.txt and install here.
+# Make run script executable
+RUN chmod +x run_spiders.sh
 
-# Command to run the spiders (this will be overridden by docker-compose)
-CMD ["bash", "run_spiders.sh"]
+# Run the spiders
+CMD ["sh", "run_spiders.sh"]

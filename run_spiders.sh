@@ -1,14 +1,16 @@
-#!/bin/bash
+#!/bin/sh
+mkdir -p logs
+mkdir -p data
 
-echo "Starting link_spider for 10 minutes..."
-scrapy crawl link_spider &
-LINK_SPIDER_PID=$! # Get the process ID of the link_spider
+echo "🕷️ Starting link_spider. Logging to link_spider.log"
+scrapy crawl link_spider -o data/urls.json > logs/link_spider.log 2>&1 &
+LINK_SPIDER_PID=$!
 
-sleep 600 # Wait for 10 minutes (600 seconds)
+echo "⏳ Waiting 6 hours before running detail_spider..."
+sleep 21600
 
-echo "Starting detail_spider (both spiders will now run concurrently)..."
-scrapy crawl detail_spider &
+echo "🚀 Starting detail_spider. Logging to detail_spider.log"
+scrapy crawl detail_spider -o data/details.json > logs/detail_spider.log 2>&1 &
 
-wait # Wait for all background processes to complete (i.e., both spiders)
-
-echo "All spiders have finished."
+wait
+echo "✅ All spiders finished." >> logs/run_status.log

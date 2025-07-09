@@ -1,11 +1,10 @@
 version: '3.8'
 
 services:
-  scrapy_project:
+  bonyad_scraper:
     build: .
-    container_name: your_scrapy_container
-    # Mount your project directory into the container if you want to make changes without rebuilding the image every time
-    # volumes:
-    #   - .:/app
-    # If you want to see the logs immediately, remove the `&` from `run_spiders.sh` or adjust logging
-    # command: bash -c "scrapy crawl link_spider & sleep 600 && scrapy crawl detail_spider & wait"
+    container_name: bonyad_scraper
+    volumes:
+      - .:/app
+    working_dir: /app
+    command: sh run_spiders.sh
