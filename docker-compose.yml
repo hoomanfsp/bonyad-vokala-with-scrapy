@@ -3,7 +3,7 @@ version: '3.8'
 services:
   bonyad_scraper:
     build: .
-    container_name: bonyad_scraper
+    container_name: bonyad_scraper:22.0
     volumes:
       - .:/app
     working_dir: /app
