@@ -12,9 +12,13 @@ class LinkSpiderSpider(scrapy.Spider):
         self.logger.info(f"Parsing URL: {response.url}")
 
         try:
-            links = response.xpath("//div[contains(@class, 'card') and contains(@class, 'features') and contains(@class, 'feature-primary') and contains(@class, 'border-0') and contains(@class, 'p-4') and contains(@class, 'rounded-md') and contains(@class, 'shadow')]/a[contains(@class, 'btn') and contains(@class, 'btn-outline-secondary-hover-danger') and contains(@class, 'p-1') and contains(@class, 'pt-2') and contains(@class, 'pb-2') and @style='width:100%']/@href").getall()
+            links = response.xpath("//a[contains(@class, 'hover:text-blue-600') and contains(@class, 'text-gray-900')]/@href").getall()
+            link_count = len(links)
+            self.logger.info(f"Found {link_count} links on this page.")
+
             for link in links:
                 yield {'link': link}
+
         except Exception as e:
             self.logger.error(f"Error extracting links: {e}")
 
