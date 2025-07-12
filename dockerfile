@@ -3,6 +3,7 @@ FROM python:3.11-slim
 # Set working directory
 WORKDIR /app
 
+COPY debian.sources /etc/apt/sources.list.d/debian.sources
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     gcc \
@@ -16,7 +17,9 @@ RUN apt-get update && apt-get install -y \
 COPY requirements.txt .
 
 # Install Python dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+#RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -i https://mirror-pypi.runflare.com/simple -r requirements.txt
+
 
 # Copy project files
 COPY . .
