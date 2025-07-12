@@ -1,10 +1,19 @@
 version: '3.8'
 
 services:
-  bonyad_scraper:
+  scrapy-crawler:
     build: .
-    container_name: bonyad_scraper:22.0
+    container_name: persian-law-crawler
     volumes:
-      - .:/app
-    working_dir: /app
-    command: sh run_spiders.sh
+      # Mount data and logs directories to persist output
+      - ./data:/app/data
+      - ./logs:/app/logs
+    environment:
+      - PYTHONUNBUFFERED=1
+    restart: unless-stopped
+    # Optional: if you need to limit resources
+    # deploy:
+    #   resources:
+    #     limits:
+    #       cpus: '1.0'
+    #       memory: 1G

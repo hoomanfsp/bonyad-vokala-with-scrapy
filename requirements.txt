@@ -1,2 +1,15 @@
 scrapy>=2.11.0
-tldextract
+twisted>=22.10.0
+w3lib>=2.1.0
+lxml>=4.9.0
+parsel>=1.7.0
+itemadapter>=0.8.0
+itemloaders>=1.0.0
+# For Persian text handling
+hazm>=0.7.0
+# For better HTTP handling
+scrapy-user-agents>=0.1.1
+# For handling JavaScript (if needed)
+scrapy-splash>=0.8.0
+# For rotating proxies (if needed)
+scrapy-rotating-proxies>=0.6.2
