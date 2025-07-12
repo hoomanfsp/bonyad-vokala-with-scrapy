@@ -20,7 +20,7 @@ class BonyadSimpleSpider(scrapy.Spider):
         answers = [a.strip() for a in answers if a.strip()]
 
         yield {
-            "url": response.url,
+           ### "url": response.url,
             "question_title": question_title,
             "question_body": question_body,
             "answers": answers
